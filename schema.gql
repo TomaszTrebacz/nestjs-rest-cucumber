@@ -1,0 +1,273 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Entry {
+  key: String!
+  value: String!
+}
+
+type CreateFileUploadPayload {
+  """Url to send form data into."""
+  url: String!
+
+  """Fields to include in the form."""
+  fields: [Entry!]!
+
+  """Upload token to use in another mutations for file assigment."""
+  uploadToken: String!
+}
+
+type User {
+  """ID of the user."""
+  id: ID!
+
+  """Timestamp of the user creation."""
+  createdAt: DateTime!
+
+  """Email of the user."""
+  email: String!
+
+  """Full name of the user."""
+  fullName: String!
+
+  """Indicates whether user is an admin."""
+  isAdmin: Boolean!
+
+  """Indicates whether user is already onboarded."""
+  isOnboarded: Boolean!
+
+  """Organization assigned to the user."""
+  organization: Organization
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserPagination {
+  """The total number of results, regardless of page and perPage arguments."""
+  totalCount: Float!
+
+  """List of nodes that matched the query."""
+  nodes: [User!]!
+}
+
+type Organization {
+  """ID of the organization."""
+  id: ID!
+
+  """Timestamp of the organization creation."""
+  createdAt: DateTime!
+
+  """Name of the organization."""
+  name: String!
+
+  """Users assigned to the organization."""
+  users(
+    """Page number (default: 1)."""
+    page: Int = 1
+
+    """Number of nodes to list per page (default: 10, max 100)."""
+    perPage: Int = 10
+    sort: UserSort = {field: CREATED_AT, direction: ASC}
+
+    """Filter by fullName containing phrase"""
+    fullName: String
+  ): UserPagination!
+}
+
+input UserSort {
+  """The field to sort results by."""
+  field: UserSortField!
+
+  """The sort direction."""
+  direction: SortDirection!
+}
+
+enum UserSortField {
+  CREATED_AT
+  FULL_NAME
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+type OrganizationPagination {
+  """The total number of results, regardless of page and perPage arguments."""
+  totalCount: Float!
+
+  """List of nodes that matched the query."""
+  nodes: [Organization!]!
+}
+
+type CreateOrganizationPayload {
+  organization: Organization!
+}
+
+type DeleteOrganizationPayload {
+  """Indicates whether organization was deleted successfully."""
+  success: Boolean!
+}
+
+type UpdateOrganizationPayload {
+  organization: Organization!
+}
+
+type ChangePasswordPayload {
+  """Indicates whether password was changed successfully."""
+  success: Boolean!
+}
+
+type LoginPayload {
+  """
+  Token that should be passed with following requests to authenticate user.
+  """
+  token: String!
+
+  """Logged user."""
+  user: User!
+}
+
+type ResetPasswordPayload {
+  """Indicates whether password reset flow has started."""
+  success: Boolean!
+}
+
+type SetNewPasswordPayload {
+  """
+  Token that should be passed with following requests to authenticate user.
+  """
+  token: String!
+
+  """Logged user."""
+  user: User!
+}
+
+type Query {
+  """Get info about authenticated user."""
+  authUser: User!
+
+  """Find single user."""
+  user(
+    """ID of a user."""
+    id: ID!
+  ): User!
+
+  """Find users list."""
+  users(
+    """Page number (default: 1)."""
+    page: Int = 1
+
+    """Number of nodes to list per page (default: 10, max 100)."""
+    perPage: Int = 10
+    sort: UserSort = {field: CREATED_AT, direction: ASC}
+
+    """Filter by fullName containing phrase"""
+    fullName: String
+
+    """Filter by assigned organization"""
+    organizationId: ID
+  ): UserPagination!
+
+  """Find single organization."""
+  organization(
+    """ID of a organization to delete."""
+    id: ID!
+  ): Organization!
+
+  """Find organizations list."""
+  organizations(
+    """Page number (default: 1)."""
+    page: Int = 1
+
+    """Number of nodes to list per page (default: 10, max 100)."""
+    perPage: Int = 10
+    sort: OrganizationSort = {field: CREATED_AT, direction: ASC}
+
+    """Filter name containing phrase"""
+    name: String
+  ): OrganizationPagination!
+}
+
+input OrganizationSort {
+  """The field to sort results by."""
+  field: OrganizationSortField!
+
+  """The sort direction."""
+  direction: SortDirection!
+}
+
+enum OrganizationSortField {
+  CREATED_AT
+  NAME
+}
+
+type Mutation {
+  changePassword(input: ChangePasswordInput!): ChangePasswordPayload!
+  login(input: LoginInput!): LoginPayload!
+  resetPassword(input: ResetPasswordInput!): ResetPasswordPayload!
+  setNewPassword(input: SetNewPasswordInput!): SetNewPasswordPayload!
+  createOrganization(input: CreateOrganizationInput!): CreateOrganizationPayload!
+  updateOrganization(input: UpdateOrganizationInput!): UpdateOrganizationPayload!
+  deleteOrganization(input: DeleteOrganizationInput!): DeleteOrganizationPayload!
+  createFileUpload(input: CreateFileUploadInput!): CreateFileUploadPayload!
+}
+
+input ChangePasswordInput {
+  """Current password of the authenticated user."""
+  currentPassword: String!
+
+  """New password."""
+  newPassword: String!
+}
+
+input LoginInput {
+  """Email of the user."""
+  email: String!
+
+  """Password of the user."""
+  password: String!
+}
+
+input ResetPasswordInput {
+  """Email of the user."""
+  email: String!
+}
+
+input SetNewPasswordInput {
+  """SetNew password token of the user."""
+  resetPasswordToken: String!
+
+  """New password."""
+  newPassword: String!
+}
+
+input CreateOrganizationInput {
+  """Name of the organization."""
+  name: String!
+}
+
+input UpdateOrganizationInput {
+  """ID of organization to update."""
+  id: ID!
+
+  """Name of the organization."""
+  name: String
+}
+
+input DeleteOrganizationInput {
+  """ID of organization to delete."""
+  id: ID!
+}
+
+input CreateFileUploadInput {
+  """Size of the file to upload."""
+  fileSize: Float!
+
+  """Name of the file to upload."""
+  fileName: String!
+}

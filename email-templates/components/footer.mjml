@@ -1,0 +1,8 @@
+<mj-section>
+  <mj-column>
+    <mj-text font-size="11px">
+      W razie jakichkolwiek problemów, skontaktuj się z nami mailowo
+      <a style="text-decoration: none; color: #015bd7;" href="mailto:support@example.com">support@example.com</a>.
+    </mj-text>
+  </mj-column>
+</mj-section>

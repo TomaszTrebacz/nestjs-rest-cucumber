@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: app-db
+    image: postgres:13.2-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - app-db:/var/lib/postgresql/data
+  redis:
+    container_name: app-redis
+    image: redis:6.2-alpine
+    ports:
+      - "${REDIS_PORT}:6379"
+
+volumes:
+  app-db:
