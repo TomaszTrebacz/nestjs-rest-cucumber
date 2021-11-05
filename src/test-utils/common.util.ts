@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { INestApplication, HttpStatus } from '@nestjs/common';
+import { INestApplication, HttpException } from '@nestjs/common';
 import faker from 'faker';
-import request from 'supertest';
+import request, { Response } from 'supertest';
 
 export const clearDatabase = async (app: INestApplication) => {
   const em = app.get(EntityManager);
@@ -55,11 +55,10 @@ export const expectUUID = expect.stringMatching(
   /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/,
 );
 
-export const expectHttpErrorMessage = (
+export const expectHttpError = (
   res: Response,
-  code: HttpStatus,
-  message: string,
+  exception: HttpException,
 ): void => {
-  expect(res.status).toBe(code);
-  expect(res.body).toMatchObject({ statusCode: code, message });
+  expect(res.status).toBe(exception.getStatus());
+  expect(res.body).toStrictEqual(exception.getResponse());
 };

@@ -2,40 +2,45 @@ import {
   UnauthorizedException,
   ConflictException,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { IsTrimmed } from '@/common/decorators/validation';
 import { composePropertyDecorators } from '@/common/utils';
 
 export const USERS_ERROR = {
-  // NO_VALID_TOKEN: new AuthenticationError('No valid auth token provided'),
-  // PERMISSION_DENIED: new ForbiddenError(
-  //   'The caller does not have permission to execute the specified operation',
-  // ),
-  // EMAIL_NOT_FOUND: new ApolloError(
-  //   'User with provided email was not found',
-  //   'USER_EMAIL_NOT_FOUND',
-  // ),
-  // INVALID_PASSWORD: new ApolloError(
-  //   'Provided password is not valid',
-  //   'USER_INVALID_PASSWORD',
-  // ),
-  // RESET_PASSWORD_TOKEN_EXPIRED: new ApolloError(
-  //   'Provided reset password token has expired',
-  //   'USER_RESET_PASSWORD_TOKEN_EXPIRED',
-  // ),
-  // ID_NOT_FOUND: new ApolloError(
-  //   'User with provided id was not found',
-  //   'USER_ID_NOT_FOUND',
-  // ),
-  // EMAIL_EXISTS: new ApolloError(
-  //   'User with provided email already exists',
-  //   'USER_EMAIL_EXISTS',
-  // ),
-  // ALREADY_ONBOARDED: new ApolloError(
-  //   'You are already onboarded',
-  //   'USER_ALREADY_ONBOARDED',
-  // ),
+  NO_VALID_TOKEN: new UnauthorizedException(
+    'No valid auth token provided',
+    'NO_VALID_TOKEN',
+  ),
+  PERMISSION_DENIED: new ForbiddenException(
+    'The caller does not have permission to execute the specified operation',
+    'PERMISSION_DENIED',
+  ),
+  ID_NOT_FOUND: new NotFoundException(
+    'User with provided id was not found',
+    'USER_ID_NOT_FOUND',
+  ),
+  EMAIL_NOT_FOUND: new NotFoundException(
+    'User with provided email was not found',
+    'USER_EMAIL_NOT_FOUND',
+  ),
+  INVALID_PASSWORD: new NotFoundException(
+    'Provided password is not valid',
+    'USER_INVALID_PASSWORD',
+  ),
+  RESET_PASSWORD_TOKEN_EXPIRED: new NotFoundException(
+    'Provided reset password token has expired',
+    'USER_RESET_PASSWORD_TOKEN_EXPIRED',
+  ),
+  EMAIL_EXISTS: new ConflictException(
+    'User with provided email already exists',
+    'USER_EMAIL_EXISTS',
+  ),
+  ALREADY_ONBOARDED: new ConflictException(
+    'You are already onboarded',
+    'USER_ALREADY_ONBOARDED',
+  ),
 };
 
 const USER_VALIDATION = {

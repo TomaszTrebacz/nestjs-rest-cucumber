@@ -16,12 +16,14 @@ export const loggerMiddleware = (
         url: req.url,
         headers: req.headers,
         body: req.body,
+        //eslint-disable-next-line @typescript-eslint/no-explicit-any
         authUserId: (req as any).user?.id,
       },
       res: {
         statusCode: res.statusCode,
         headers: res.getHeaders(),
       },
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       err: (res as any).err,
       responseTime,
     };

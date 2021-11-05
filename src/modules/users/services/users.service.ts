@@ -1,5 +1,4 @@
-import { FilterQuery } from '@mikro-orm/core';
-import { EntityManager, QueryBuilder } from '@mikro-orm/postgresql';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { USERS_ERROR } from '@/modules/users/users.constant';
@@ -12,8 +11,7 @@ export class UsersService {
     const user = await this.em.findOne(UserEntity, id);
 
     if (!user) {
-      throw 'a';
-      // throw USERS_ERROR.ID_NOT_FOUND;
+      throw USERS_ERROR.ID_NOT_FOUND;
     }
 
     return user;

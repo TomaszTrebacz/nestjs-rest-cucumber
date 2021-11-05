@@ -37,7 +37,7 @@ export class OrganizationsService {
     );
 
     if (doesNameExists) {
-      // throw ORGANIZATIONS_ERROR.NAME_EXISTS;
+      throw ORGANIZATIONS_ERROR.NAME_EXISTS;
     }
   }
 }
