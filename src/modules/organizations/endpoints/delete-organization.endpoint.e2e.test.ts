@@ -1,5 +1,4 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import faker from 'faker';
 import { createApp } from '@/main';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { ORGANIZATIONS_ERROR } from '@/modules/organizations/organizations.constant';
@@ -9,10 +8,10 @@ import {
   clearDatabase,
   defineCall,
   expectHttpError,
-  expectUUID,
+  unknownId,
 } from '@/test-utils/common.util';
 
-describe('organizations -> CreateOrganizationEndpoint', () => {
+describe('organizations -> DeleteOrganizationEndpoint', () => {
   let app: INestApplication;
 
   const createAuthUser = setupCreateAuthUser(() => app);
@@ -30,19 +29,14 @@ describe('organizations -> CreateOrganizationEndpoint', () => {
     await clearDatabase(app);
   });
 
-  const callCreateOrganization = defineCall(
+  const callDeleteOrganization = defineCall(
     () => app,
-    'post',
-    '/organizations',
+    'delete',
+    (organizationId: string) => `/organizations/${organizationId}`,
   );
 
-  const randomInput = (data?: Record<string, unknown>) => ({
-    name: faker.random.alphaNumeric(6),
-    ...data,
-  });
-
   it('Should return UNAUTHENTICATED when no valid auth token was provided', async () => {
-    const res = await callCreateOrganization();
+    const res = await callDeleteOrganization('', unknownId());
 
     expectHttpError(res, USERS_ERROR.NO_VALID_TOKEN);
   });
@@ -50,36 +44,29 @@ describe('organizations -> CreateOrganizationEndpoint', () => {
   it('Should return PERMISSION_DENIED when called by non admin user', async () => {
     const authUser = await createAuthUser();
 
-    const res = await callCreateOrganization(authUser.token);
+    const res = await callDeleteOrganization(authUser.token, unknownId());
 
     expectHttpError(res, USERS_ERROR.PERMISSION_DENIED);
   });
 
-  it('Should return ORGANIZATION_ERROR.NAME_EXISTS when organization with provided name already exists', async () => {
+  it('Should return NOT_FOUND when organization with provided id was not found', async () => {
     const authUser = await createAuthUser({ isAdmin: true });
-    const existingOrganizations = await randomOrganization.one();
 
-    const input = randomInput({ name: existingOrganizations.name });
+    const res = await callDeleteOrganization(authUser.token, unknownId());
 
-    const res = await callCreateOrganization(authUser.token).send(input);
-
-    expectHttpError(res, ORGANIZATIONS_ERROR.NAME_EXISTS);
+    expectHttpError(res, ORGANIZATIONS_ERROR.ID_NOT_FOUND);
   });
 
-  it('Should return CreateOrganizationPayload', async () => {
+  it('Should delete organization successfully', async () => {
     const authUser = await createAuthUser({ isAdmin: true });
 
-    const input = randomInput();
+    const organization = await randomOrganization.one();
 
-    const { status, body } = await callCreateOrganization(authUser.token).send(
-      input,
+    const { status } = await callDeleteOrganization(
+      authUser.token,
+      organization.id,
     );
 
-    expect(status).toBe(HttpStatus.CREATED);
-    expect(body).toStrictEqual({
-      id: expectUUID,
-      createdAt: expect.any(String),
-      name: input.name,
-    });
+    expect(status).toBe(HttpStatus.NO_CONTENT);
   });
 });

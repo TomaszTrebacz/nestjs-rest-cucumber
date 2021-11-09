@@ -12,8 +12,7 @@ export class OrganizationsService {
     const organization = await this.em.findOne(OrganizationEntity, id);
 
     if (!organization) {
-      throw 'a';
-      // throw ORGANIZATIONS_ERROR.ID_NOT_FOUND;
+      throw ORGANIZATIONS_ERROR.ID_NOT_FOUND;
     }
 
     return organization;
