@@ -1,16 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import {
-  Controller,
-  Body,
-  UseInterceptors,
-  Param,
-  Patch,
-} from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpStatus, Param, Patch } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '@/common/decorators/auth-user.decorator';
+import { ResponseDecorator } from '@/common/decorators/response.decorator';
 import { IsUndefinable } from '@/common/decorators/validation';
 import { AuthGuard } from '@/common/guards/auth.guard';
-import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import {
   OrganizationDto,
   OrganizationIdDto,
@@ -41,8 +35,7 @@ export class UpdateOrganizationEndpoint {
   @Patch()
   @ApiOperation({ description: 'Update organization' })
   @AuthGuard(true)
-  @ApiOkResponse({ type: OrganizationDto })
-  @UseInterceptors(new TransformInterceptor(OrganizationDto))
+  @ResponseDecorator(HttpStatus.OK, OrganizationDto)
   async updateOrganization(
     @AuthUser() authUser: UserEntity,
     @Param() { organizationId }: OrganizationIdDto,

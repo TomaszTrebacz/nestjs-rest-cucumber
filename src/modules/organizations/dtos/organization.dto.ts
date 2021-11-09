@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsUUID } from 'class-validator';
+import { createListDto } from '@/common/helpers/list';
 import { OrganizationNameApiProperty } from '@/modules/organizations/organizations.constant';
 
 export class OrganizationIdDto {
@@ -34,3 +35,5 @@ export class OrganizationDto {
   @Expose()
   name!: string;
 }
+
+export class PaginatedOrganizationDto extends createListDto(OrganizationDto) {}

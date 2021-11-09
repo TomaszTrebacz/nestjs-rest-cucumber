@@ -1,9 +1,9 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Controller, Post, Body, UseInterceptors } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '@/common/decorators/auth-user.decorator';
+import { ResponseDecorator } from '@/common/decorators/response.decorator';
 import { AuthGuard } from '@/common/guards/auth.guard';
-import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import { OrganizationDto } from '@/modules/organizations/dtos/organization.dto';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 import {
@@ -31,8 +31,7 @@ export class CreateOrganizationEndpoint {
   @Post()
   @ApiOperation({ description: 'Create organization' })
   @AuthGuard(true)
-  @ApiCreatedResponse({ type: OrganizationDto })
-  @UseInterceptors(new TransformInterceptor(OrganizationDto))
+  @ResponseDecorator(HttpStatus.CREATED, OrganizationDto)
   async createOrganization(
     @AuthUser() authUser: UserEntity,
     @Body() body: CreateOrganizationBodyDto,
