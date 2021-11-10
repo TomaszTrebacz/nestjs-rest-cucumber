@@ -7,4 +7,9 @@ declare global {
       app: INestApplication;
     }
   }
+  namespace Express {
+    interface Response {
+      err?: Error;
+    }
+  }
 }

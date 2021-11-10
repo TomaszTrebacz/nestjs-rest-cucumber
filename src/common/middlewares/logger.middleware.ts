@@ -23,14 +23,13 @@ export const loggerMiddleware = (
         statusCode: res.statusCode,
         headers: res.getHeaders(),
       },
-      //eslint-disable-next-line @typescript-eslint/no-explicit-any
-      err: (res as any).err,
+      err: res.err,
       responseTime,
     };
 
     if (res.statusCode >= 500) {
       logger.error(logData);
-    } else if (res.statusCode >= 400 && res.statusCode < 500) {
+    } else if (res.statusCode >= 400) {
       logger.warn(logData);
     } else {
       logger.info(logData);

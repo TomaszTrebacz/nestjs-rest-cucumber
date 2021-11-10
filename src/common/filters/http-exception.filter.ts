@@ -13,8 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (response as any).err = exception;
+    response.err = exception;
 
     if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();

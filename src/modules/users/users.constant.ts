@@ -1,4 +1,5 @@
 import {
+  applyDecorators,
   UnauthorizedException,
   ConflictException,
   NotFoundException,
@@ -6,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { IsTrimmed } from '@/common/decorators/validation';
-import { composePropertyDecorators } from '@/common/utils';
+
+export const USERS_TAG = 'Users';
 
 export const USERS_ERROR = {
   NO_VALID_TOKEN: new UnauthorizedException(
@@ -57,18 +59,18 @@ const USER_VALIDATION = {
   },
 };
 
-export const IsUserEmailValid = composePropertyDecorators(
+export const IsUserEmailValid = applyDecorators(
   IsEmail(),
   MaxLength(USER_VALIDATION.EMAIL.MAX_LENGTH),
   IsTrimmed(),
 );
 
-export const IsUserPasswordValid = composePropertyDecorators(
+export const IsUserPasswordValid = applyDecorators(
   MinLength(USER_VALIDATION.PASSWORD.MIN_LENGTH),
   MaxLength(USER_VALIDATION.PASSWORD.MAX_LENGTH),
 );
 
-export const IsUserFullNameValid = composePropertyDecorators(
+export const IsUserFullNameValid = applyDecorators(
   MinLength(USER_VALIDATION.FULL_NAME.MIN_LENGTH),
   MaxLength(USER_VALIDATION.FULL_NAME.MAX_LENGTH),
   IsTrimmed(),

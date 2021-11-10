@@ -1,7 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthUser } from '@/common/decorators/auth-user.decorator';
 import { ResponseDecorator } from '@/common/decorators/response.decorator';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { OrganizationDto } from '@/modules/organizations/dtos/organization.dto';
@@ -12,7 +11,6 @@ import {
   ORGANIZATIONS_TAG,
 } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
-import { UserEntity } from '@/modules/users/entities/user.entity';
 
 class CreateOrganizationBodyDto {
   @OrganizationNameApiProperty()
@@ -32,10 +30,7 @@ export class CreateOrganizationEndpoint {
   @ApiOperation({ description: 'Create organization' })
   @AuthGuard(true)
   @ResponseDecorator(HttpStatus.CREATED, OrganizationDto)
-  async createOrganization(
-    @AuthUser() authUser: UserEntity,
-    @Body() body: CreateOrganizationBodyDto,
-  ) {
+  async createOrganization(@Body() body: CreateOrganizationBodyDto) {
     await this.organizationService.assertNameUniqueness(body.name);
 
     const organization = new OrganizationEntity(body);

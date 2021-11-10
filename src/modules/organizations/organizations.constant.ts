@@ -1,8 +1,11 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  applyDecorators,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 import { IsTrimmed } from '@/common/decorators/validation';
-import { composePropertyDecorators } from '@/common/utils';
 
 export const ORGANIZATIONS_TAG = 'Organizations';
 
@@ -31,9 +34,10 @@ export const OrganizationNameApiProperty = () =>
     description: 'Name of the organization.',
   });
 
-export const IsOrganizationNameValid = composePropertyDecorators(
-  IsString(),
-  MinLength(ORGANIZATION_VALIDATION.NAME.MIN_LENGTH),
-  MaxLength(ORGANIZATION_VALIDATION.NAME.MAX_LENGTH),
-  IsTrimmed(),
-);
+export const IsOrganizationNameValid = () =>
+  applyDecorators(
+    IsString(),
+    MinLength(ORGANIZATION_VALIDATION.NAME.MIN_LENGTH),
+    MaxLength(ORGANIZATION_VALIDATION.NAME.MAX_LENGTH),
+    IsTrimmed(),
+  );

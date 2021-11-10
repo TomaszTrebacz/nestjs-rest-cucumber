@@ -1,6 +1,6 @@
 # Backend graphql example app
 
-This repository is for showing the design of MR backend graphql project structure.
+This repository is for showing the design of MR backend REST project structure.
 
 
 ## Configuration
@@ -127,7 +127,7 @@ All project source files that you should care of should be placed under `./src` 
  - mikro-orm.config.ts - MikroORM config file
 ```
 
-Each module should looks like:
+Each module should look like:
 ```
 modules
 ├──app.module - merges and parses all application modules
@@ -137,28 +137,21 @@ modules
    │  └──cats.utils.ts
    ├──entities - MikroORM entities
    │  └──cat.entity.ts
-   ├──list-args - graphql args definitions for list queries/resolvers
-   │  └──cats.args.ts
-   ├──loaders - request scoped data-loaders to avoid graphql n+1 problem
-   │  └──cats.loader.ts
-   ├──models - graphql models that can be returned by queries/mutations (loaders should be used here to fetch related data)
-   │  └──cat.model.ts
-   ├──mutations - graphql mutations used to change data (each mutation should be places in separate file which contains mutation handler logic with Input and Payload types)
+   ├──dtos - dtos that can be returned by endpoints
+   │  └──cat.dto.ts
+   ├──endpoints - each endpoint should be placed in separate file containing class with handler method which describes endpoint properties
    │  ├──create-cat.mutation.ts
-   │  └──create-cat.mutation.e2e.test.ts - every mutation should have dedicated test file which tests every mutation edge case
-   ├──queries - graphql queries used to fetch data (structure similar to mutations directory)
-   │  ├──cat.query.ts
-   │  └──cat.query.e2e.test.ts
-   ├──services - stores shared logic used across mutations and queries
+   │  └──create-cat.mutation.e2e.test.ts - every endpoint should have dedicated test file which tests every response edge case
+   ├──services - stores shared logic used across endpoints
    │  └──cats.service.ts
    ├──cats.constant.ts - stores constant data related to module like errors or validation decorators
-   └──cats.module.ts - merges all module providers (loaders, models, mutations, queries, services)
+   └──cats.module.ts - merges all module providers (entities, endpoints, services)
 ```
 
 
 ### Testing
 
-Every query/mutation should be tested with e2e tests that covers every of it's allowed responses.
+Every endpoint should be tested with e2e tests that covers every of it's allowed responses.
 
 To run e2e tests call:
 ```

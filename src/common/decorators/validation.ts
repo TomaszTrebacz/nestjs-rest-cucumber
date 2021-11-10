@@ -4,7 +4,6 @@ import {
   ValidationOptions,
   registerDecorator,
 } from 'class-validator';
-import { composePropertyDecorators } from '@/common/utils';
 
 /**
  * Skips validation if the target is null
@@ -63,4 +62,4 @@ export const IsTrimmed = (
 
 export const tokenRegex = /^[a-zA-Z0-9_-]{24}$/;
 
-export const IsTokenValid = composePropertyDecorators(Matches(tokenRegex));
+export const IsTokenValid = () => Matches(tokenRegex);

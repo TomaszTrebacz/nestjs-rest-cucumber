@@ -1,7 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthUser } from '@/common/decorators/auth-user.decorator';
 import { ResponseDecorator } from '@/common/decorators/response.decorator';
 import { IsUndefinable } from '@/common/decorators/validation';
 import { AuthGuard } from '@/common/guards/auth.guard';
@@ -15,7 +14,6 @@ import {
   ORGANIZATIONS_TAG,
 } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
-import { UserEntity } from '@/modules/users/entities/user.entity';
 
 class UpdateOrganizationBodyDto {
   @OrganizationNameApiProperty()
@@ -37,7 +35,6 @@ export class UpdateOrganizationEndpoint {
   @AuthGuard(true)
   @ResponseDecorator(HttpStatus.OK, OrganizationDto)
   async updateOrganization(
-    @AuthUser() authUser: UserEntity,
     @Param() { organizationId }: OrganizationIdDto,
     @Body() body: UpdateOrganizationBodyDto,
   ) {
