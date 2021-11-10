@@ -3,7 +3,7 @@ import { OrganizationEntity } from '@/modules/organizations/entities/organizatio
 import { randomEntityData } from '@/test-utils/random-entity-data';
 
 const randomOrganizationInput = (): Partial<OrganizationEntity> => ({
-  name: faker.random.alphaNumeric(10),
+  name: faker.unique(faker.random.alphaNumeric, [10]),
 });
 
 export const setupRandomOrganization = randomEntityData(

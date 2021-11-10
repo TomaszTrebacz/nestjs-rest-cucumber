@@ -1,15 +1,15 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ResponseDecorator } from '@/common/decorators/response.decorator';
+import { DefineResponse } from '@/common/decorators/define-response';
 import { AuthGuard } from '@/common/guards/auth.guard';
-import { OrganizationDto } from '@/modules/organizations/dtos/organization.dto';
-import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 import {
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
-  ORGANIZATIONS_TAG,
-} from '@/modules/organizations/organizations.constant';
+  OrganizationDto,
+} from '@/modules/organizations/dtos/organization.dto';
+import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
+import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
 
 class CreateOrganizationBodyDto {
@@ -18,7 +18,7 @@ class CreateOrganizationBodyDto {
   name!: string;
 }
 
-@Controller('/organizations')
+@Controller()
 @ApiTags(ORGANIZATIONS_TAG)
 export class CreateOrganizationEndpoint {
   constructor(
@@ -26,11 +26,11 @@ export class CreateOrganizationEndpoint {
     private readonly organizationService: OrganizationsService,
   ) {}
 
-  @Post()
+  @Post('/organizations')
   @ApiOperation({ description: 'Create organization' })
   @AuthGuard(true)
-  @ResponseDecorator(HttpStatus.CREATED, OrganizationDto)
-  async createOrganization(@Body() body: CreateOrganizationBodyDto) {
+  @DefineResponse(HttpStatus.CREATED, OrganizationDto)
+  async handler(@Body() body: CreateOrganizationBodyDto) {
     await this.organizationService.assertNameUniqueness(body.name);
 
     const organization = new OrganizationEntity(body);

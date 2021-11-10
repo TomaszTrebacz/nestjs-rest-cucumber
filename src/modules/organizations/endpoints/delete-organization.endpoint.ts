@@ -1,13 +1,13 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ResponseDecorator } from '@/common/decorators/response.decorator';
+import { DefineResponse } from '@/common/decorators/define-response';
 import { AuthGuard } from '@/common/guards/auth.guard';
-import { OrganizationIdDto } from '@/modules/organizations/dtos/organization.dto';
+import { OrganizationIdPathParamDto } from '@/modules/organizations/dtos/organization.dto';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
 
-@Controller('/organizations/:organizationId')
+@Controller()
 @ApiTags(ORGANIZATIONS_TAG)
 export class DeleteOrganizationEndpoint {
   constructor(
@@ -15,11 +15,11 @@ export class DeleteOrganizationEndpoint {
     private readonly organizationService: OrganizationsService,
   ) {}
 
-  @Delete()
+  @Delete('/organizations/:organizationId')
   @ApiOperation({ description: 'Delete organization' })
   @AuthGuard(true)
-  @ResponseDecorator(HttpStatus.NO_CONTENT)
-  async deleteOrganization(@Param() { organizationId }: OrganizationIdDto) {
+  @DefineResponse(HttpStatus.NO_CONTENT)
+  async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
     const organization = await this.organizationService.findOneByIdOrThrow(
       organizationId,
     );

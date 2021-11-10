@@ -1,18 +1,16 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ResponseDecorator } from '@/common/decorators/response.decorator';
-import { IsUndefinable } from '@/common/decorators/validation';
+import { DefineResponse } from '@/common/decorators/define-response';
 import { AuthGuard } from '@/common/guards/auth.guard';
+import { IsUndefinable } from '@/common/validators';
 import {
   OrganizationDto,
-  OrganizationIdDto,
-} from '@/modules/organizations/dtos/organization.dto';
-import {
+  OrganizationIdPathParamDto,
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
-  ORGANIZATIONS_TAG,
-} from '@/modules/organizations/organizations.constant';
+} from '@/modules/organizations/dtos/organization.dto';
+import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
 
 class UpdateOrganizationBodyDto {
@@ -22,7 +20,7 @@ class UpdateOrganizationBodyDto {
   name?: string;
 }
 
-@Controller('/organizations/:organizationId')
+@Controller()
 @ApiTags(ORGANIZATIONS_TAG)
 export class UpdateOrganizationEndpoint {
   constructor(
@@ -30,12 +28,12 @@ export class UpdateOrganizationEndpoint {
     private readonly organizationService: OrganizationsService,
   ) {}
 
-  @Patch()
+  @Patch('/organizations/:organizationId')
   @ApiOperation({ description: 'Update organization' })
   @AuthGuard(true)
-  @ResponseDecorator(HttpStatus.OK, OrganizationDto)
-  async updateOrganization(
-    @Param() { organizationId }: OrganizationIdDto,
+  @DefineResponse(HttpStatus.OK, OrganizationDto)
+  async handler(
+    @Param() { organizationId }: OrganizationIdPathParamDto,
     @Body() body: UpdateOrganizationBodyDto,
   ) {
     const organization = await this.organizationService.findOneByIdOrThrow(

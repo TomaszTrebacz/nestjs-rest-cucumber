@@ -1,12 +1,9 @@
 import {
-  applyDecorators,
   UnauthorizedException,
   ConflictException,
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { IsEmail, MaxLength, MinLength } from 'class-validator';
-import { IsTrimmed } from '@/common/decorators/validation';
 
 export const USERS_TAG = 'Users';
 
@@ -44,34 +41,3 @@ export const USERS_ERROR = {
     'USER_ALREADY_ONBOARDED',
   ),
 };
-
-const USER_VALIDATION = {
-  EMAIL: {
-    MAX_LENGTH: 254,
-  },
-  PASSWORD: {
-    MIN_LENGTH: 6,
-    MAX_LENGTH: 64,
-  },
-  FULL_NAME: {
-    MIN_LENGTH: 1,
-    MAX_LENGTH: 100,
-  },
-};
-
-export const IsUserEmailValid = applyDecorators(
-  IsEmail(),
-  MaxLength(USER_VALIDATION.EMAIL.MAX_LENGTH),
-  IsTrimmed(),
-);
-
-export const IsUserPasswordValid = applyDecorators(
-  MinLength(USER_VALIDATION.PASSWORD.MIN_LENGTH),
-  MaxLength(USER_VALIDATION.PASSWORD.MAX_LENGTH),
-);
-
-export const IsUserFullNameValid = applyDecorators(
-  MinLength(USER_VALIDATION.FULL_NAME.MIN_LENGTH),
-  MaxLength(USER_VALIDATION.FULL_NAME.MAX_LENGTH),
-  IsTrimmed(),
-);

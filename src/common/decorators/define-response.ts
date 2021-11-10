@@ -8,7 +8,7 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 
-export const ResponseDecorator = (status: HttpStatus, type?: ClassType) => {
+export const DefineResponse = (status: HttpStatus, type?: ClassType) => {
   const decorators = [
     HttpCode(status),
     ApiResponse({
