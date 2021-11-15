@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { WsAdapter } from '@nestjs/platform-ws';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CONFIG } from '@/config';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
@@ -26,8 +25,6 @@ export const createApp = async (): Promise<NestExpressApplication> => {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(loggerMiddleware);
-
-  app.useWebSocketAdapter(new WsAdapter(app));
 
   if (CONFIG.APP.SWAGGER_IS_ENABLED) {
     const swaggerOptions = new DocumentBuilder()
