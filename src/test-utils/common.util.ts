@@ -49,8 +49,6 @@ export const defineCall =
 
 export const unknownId = () => faker.datatype.uuid();
 
-export const unknownUploadToken = () => faker.random.alphaNumeric(24);
-
 export const expectUUID = expect.stringMatching(
   /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/,
 );

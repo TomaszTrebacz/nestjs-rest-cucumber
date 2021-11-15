@@ -4,7 +4,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import {
-  OrganizationDto,
+  OrganizationResponseDto,
   OrganizationIdPathParamDto,
 } from '@/modules/organizations/dtos/organization.dto';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
@@ -21,7 +21,7 @@ export class GetSingleOrganizationEndpoint {
   @Get('/organizations/:organizationId')
   @ApiOperation({ description: 'Get single organization' })
   @AuthGuard(true)
-  @DefineResponse(HttpStatus.OK, OrganizationDto)
+  @DefineResponse(HttpStatus.OK, OrganizationResponseDto)
   async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
     return await this.organizationService.findOneByIdOrThrow(organizationId);
   }

@@ -5,9 +5,9 @@ export const logger = pino({
   level: CONFIG.APP.LOG_LEVEL,
   nestedKey: 'data',
   redact: [
-    'data.variables.input.password',
-    'data.variables.input.newPassword',
-    'data.headers.authorization',
+    'data.req.headers.authorization',
+    'data.req.body.password',
+    'data.req.body.newPassword',
   ],
   serializers: {
     data(val) {

@@ -9,7 +9,7 @@ import {
 } from '@/common/helpers/list';
 import { IsUndefinable } from '@/common/validators';
 import {
-  PaginatedOrganizationDto,
+  PaginatedOrganizationResponseDto,
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
 } from '@/modules/organizations/dtos/organization.dto';
@@ -39,7 +39,7 @@ export class GetOrganizationsListEndpoint {
   @Get('/organizations')
   @ApiOperation({ description: 'Get organizations list' })
   @AuthGuard(true)
-  @DefineResponse(HttpStatus.OK, PaginatedOrganizationDto)
+  @DefineResponse(HttpStatus.OK, PaginatedOrganizationResponseDto)
   async handler(@Query() queryParam: GetOrganizationsListQueryParamDto) {
     const query = this.em.createQueryBuilder(OrganizationEntity);
 

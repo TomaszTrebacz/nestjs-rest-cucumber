@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 import { APP } from './app.config';
 import { AWS } from './aws.config';
 import { DB } from './db.config';
-import { REDIS } from './redis.config';
 
 config({ path: resolve(__dirname, '../../.env') });
 
@@ -14,9 +13,6 @@ class Config {
 
   @ValidateNested()
   DB = DB;
-
-  @ValidateNested()
-  REDIS = REDIS;
 
   @ValidateNested()
   AWS = AWS;

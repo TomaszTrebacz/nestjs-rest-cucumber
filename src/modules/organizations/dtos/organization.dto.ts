@@ -35,7 +35,7 @@ export class OrganizationIdPathParamDto {
   organizationId!: string;
 }
 
-export class OrganizationDto {
+export class OrganizationResponseDto {
   @OrganizationIdApiProperty()
   @Expose()
   id!: string;
@@ -53,4 +53,6 @@ export class OrganizationDto {
   name!: string;
 }
 
-export class PaginatedOrganizationDto extends createListDto(OrganizationDto) {}
+export class PaginatedOrganizationResponseDto extends createListDto(
+  OrganizationResponseDto,
+) {}

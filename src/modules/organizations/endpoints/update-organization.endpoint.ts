@@ -5,7 +5,7 @@ import { DefineResponse } from '@/common/decorators/define-response';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { IsUndefinable } from '@/common/validators';
 import {
-  OrganizationDto,
+  OrganizationResponseDto,
   OrganizationIdPathParamDto,
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
@@ -31,7 +31,7 @@ export class UpdateOrganizationEndpoint {
   @Patch('/organizations/:organizationId')
   @ApiOperation({ description: 'Update organization' })
   @AuthGuard(true)
-  @DefineResponse(HttpStatus.OK, OrganizationDto)
+  @DefineResponse(HttpStatus.OK, OrganizationResponseDto)
   async handler(
     @Param() { organizationId }: OrganizationIdPathParamDto,
     @Body() body: UpdateOrganizationBodyDto,

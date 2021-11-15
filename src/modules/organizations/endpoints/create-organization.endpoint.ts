@@ -6,7 +6,7 @@ import { AuthGuard } from '@/common/guards/auth.guard';
 import {
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
-  OrganizationDto,
+  OrganizationResponseDto,
 } from '@/modules/organizations/dtos/organization.dto';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
@@ -29,7 +29,7 @@ export class CreateOrganizationEndpoint {
   @Post('/organizations')
   @ApiOperation({ description: 'Create organization' })
   @AuthGuard(true)
-  @DefineResponse(HttpStatus.CREATED, OrganizationDto)
+  @DefineResponse(HttpStatus.CREATED, OrganizationResponseDto)
   async handler(@Body() body: CreateOrganizationBodyDto) {
     await this.organizationService.assertNameUniqueness(body.name);
 

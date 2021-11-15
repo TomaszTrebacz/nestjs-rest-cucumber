@@ -27,29 +27,6 @@ export class AuthService {
     return authorization.replace('Bearer ', '');
   }
 
-  getTokenFromCookie(req: Request): undefined | string {
-    const { cookie } = req.headers;
-
-    if (!cookie) {
-      return;
-    }
-
-    const parts = cookie.split(/; */);
-    const tokenPart = parts.find((part) => part.startsWith('token='));
-
-    if (!tokenPart) {
-      return;
-    }
-
-    const token = tokenPart.replace('token=', '').split(' ')[0];
-
-    if (!token.match(/^[a-zA-Z0-9_-]{24}$/)) {
-      return;
-    }
-
-    return token;
-  }
-
   async getSessionByToken(token?: string): Promise<undefined | SessionEntity> {
     if (!token) {
       return;
@@ -83,9 +60,5 @@ export class AuthService {
 
   async getSessionFromHeader(req: Request): Promise<undefined | SessionEntity> {
     return await this.getSessionByToken(this.getTokenFromHeader(req));
-  }
-
-  async getSessionFromCookie(req: Request): Promise<undefined | SessionEntity> {
-    return await this.getSessionByToken(this.getTokenFromCookie(req));
   }
 }
