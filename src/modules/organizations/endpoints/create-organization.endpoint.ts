@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
-import { AuthGuard } from '@/common/guards/auth.guard';
+import { AuthGuard, UserType } from '@/common/guards/auth.guard';
 import {
   IsOrganizationNameValid,
   OrganizationNameApiProperty,
@@ -28,7 +28,7 @@ export class CreateOrganizationEndpoint {
 
   @Post('/organizations')
   @ApiOperation({ description: 'Create organization' })
-  @AuthGuard(true)
+  @AuthGuard(UserType.ADMIN)
   @DefineResponse(HttpStatus.CREATED, OrganizationResponseDto)
   async handler(@Body() body: CreateOrganizationBodyDto) {
     await this.organizationService.assertNameUniqueness(body.name);

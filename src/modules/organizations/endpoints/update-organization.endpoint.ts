@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Body, Controller, HttpStatus, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
-import { AuthGuard } from '@/common/guards/auth.guard';
+import { AuthGuard, UserType } from '@/common/guards/auth.guard';
 import { IsUndefinable } from '@/common/validators';
 import {
   OrganizationResponseDto,
@@ -30,7 +30,7 @@ export class UpdateOrganizationEndpoint {
 
   @Patch('/organizations/:organizationId')
   @ApiOperation({ description: 'Update organization' })
-  @AuthGuard(true)
+  @AuthGuard(UserType.ADMIN)
   @DefineResponse(HttpStatus.OK, OrganizationResponseDto)
   async handler(
     @Param() { organizationId }: OrganizationIdPathParamDto,

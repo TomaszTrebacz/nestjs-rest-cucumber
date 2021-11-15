@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, HttpStatus, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
-import { AuthGuard } from '@/common/guards/auth.guard';
+import { AuthGuard, UserType } from '@/common/guards/auth.guard';
 import {
   createListQueryParamDto,
   returnPaginatedResult,
@@ -38,7 +38,7 @@ export class GetOrganizationsListEndpoint {
 
   @Get('/organizations')
   @ApiOperation({ description: 'Get organizations list' })
-  @AuthGuard(true)
+  @AuthGuard(UserType.ADMIN)
   @DefineResponse(HttpStatus.OK, PaginatedOrganizationResponseDto)
   async handler(@Query() queryParam: GetOrganizationsListQueryParamDto) {
     const query = this.em.createQueryBuilder(OrganizationEntity);

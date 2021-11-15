@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, Param, HttpStatus, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
-import { AuthGuard } from '@/common/guards/auth.guard';
+import { AuthGuard, UserType } from '@/common/guards/auth.guard';
 import {
   OrganizationResponseDto,
   OrganizationIdPathParamDto,
@@ -20,7 +20,7 @@ export class GetSingleOrganizationEndpoint {
 
   @Get('/organizations/:organizationId')
   @ApiOperation({ description: 'Get single organization' })
-  @AuthGuard(true)
+  @AuthGuard(UserType.ADMIN)
   @DefineResponse(HttpStatus.OK, OrganizationResponseDto)
   async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
     return await this.organizationService.findOneByIdOrThrow(organizationId);

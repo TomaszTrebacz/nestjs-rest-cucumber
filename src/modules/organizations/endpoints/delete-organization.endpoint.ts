@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefineResponse } from '@/common/decorators/define-response';
-import { AuthGuard } from '@/common/guards/auth.guard';
+import { AuthGuard, UserType } from '@/common/guards/auth.guard';
 import { OrganizationIdPathParamDto } from '@/modules/organizations/dtos/organization.dto';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
@@ -17,7 +17,7 @@ export class DeleteOrganizationEndpoint {
 
   @Delete('/organizations/:organizationId')
   @ApiOperation({ description: 'Delete organization' })
-  @AuthGuard(true)
+  @AuthGuard(UserType.ADMIN)
   @DefineResponse(HttpStatus.NO_CONTENT)
   async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
     const organization = await this.organizationService.findOneByIdOrThrow(

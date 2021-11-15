@@ -46,6 +46,11 @@ class AuthenticationGuard implements CanActivate {
   }
 }
 
+export const UserType = {
+  ADMIN: true,
+  STANDARD: false,
+};
+
 export const AuthGuard = (isAdmin?: boolean) => {
   const decorators = [
     UseGuards(AuthenticationGuard),
