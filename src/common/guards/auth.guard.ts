@@ -1,22 +1,10 @@
-import {
-  applyDecorators,
-  SetMetadata,
-  UseGuards,
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import {
-  ApiBearerAuth,
-  ApiUnauthorizedResponse,
-  ApiForbiddenResponse,
-} from '@nestjs/swagger';
 import { AuthService } from '@/modules/users/services/auth.service';
 import { USERS_ERROR } from '@/modules/users/users.constant';
 
 @Injectable()
-class AuthenticationGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
@@ -45,29 +33,3 @@ class AuthenticationGuard implements CanActivate {
     return true;
   }
 }
-
-export const UserType = {
-  ADMIN: true,
-  STANDARD: false,
-};
-
-export const AuthGuard = (isAdmin?: boolean) => {
-  const decorators = [
-    UseGuards(AuthenticationGuard),
-    ApiBearerAuth(),
-    ApiUnauthorizedResponse({
-      description: USERS_ERROR.NO_VALID_TOKEN.message,
-    }),
-  ];
-
-  if (isAdmin !== undefined) {
-    decorators.unshift(SetMetadata('isAdmin', isAdmin));
-    decorators.push(
-      ApiForbiddenResponse({
-        description: `Auth user isAdmin parameter is not equal to "${isAdmin}".`,
-      }),
-    );
-  }
-
-  return applyDecorators(...decorators);
-};
