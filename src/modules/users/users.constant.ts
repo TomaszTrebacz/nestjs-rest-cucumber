@@ -41,3 +41,17 @@ export const USERS_ERROR = {
     'USER_ALREADY_ONBOARDED',
   ),
 };
+
+export const USER_VALIDATION = {
+  EMAIL: {
+    MAX_LENGTH: 254,
+  },
+  PASSWORD: {
+    MIN_LENGTH: 6,
+    MAX_LENGTH: 64,
+  },
+  FULL_NAME: {
+    MIN_LENGTH: 1,
+    MAX_LENGTH: 100,
+  },
+};
