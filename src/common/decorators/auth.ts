@@ -5,7 +5,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@/common/guards/auth.guard';
-import { USERS_ERROR } from '@/modules/users/users.constant';
+import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 
 export const UserType = {
   ADMIN: true,
@@ -17,7 +17,7 @@ export const Auth = (isAdmin?: boolean) => {
     UseGuards(AuthGuard),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({
-      description: USERS_ERROR.NO_VALID_TOKEN.message,
+      description: AUTH_ERROR.NO_VALID_TOKEN.message,
     }),
   ];
 

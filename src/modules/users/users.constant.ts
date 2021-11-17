@@ -1,21 +1,8 @@
-import {
-  UnauthorizedException,
-  ConflictException,
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 export const USERS_TAG = 'Users';
 
 export const USERS_ERROR = {
-  NO_VALID_TOKEN: new UnauthorizedException(
-    'No valid auth token provided',
-    'NO_VALID_TOKEN',
-  ),
-  PERMISSION_DENIED: new ForbiddenException(
-    'The caller does not have permission to execute the specified operation',
-    'PERMISSION_DENIED',
-  ),
   ID_NOT_FOUND: new NotFoundException(
     'User with provided id was not found',
     'USER_ID_NOT_FOUND',

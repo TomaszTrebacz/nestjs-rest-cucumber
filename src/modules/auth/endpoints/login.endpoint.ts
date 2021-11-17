@@ -5,6 +5,9 @@ import argon2 from 'argon2';
 import { Expose, Type } from 'class-transformer';
 import { DefineResponse } from '@/common/decorators/define-response';
 import { createRandomToken, hashString } from '@/common/utils';
+import { AUTH_TAG } from '@/modules/auth/auth.constant';
+import { SessionEntity } from '@/modules/auth/entities/session.entity';
+import { AuthService } from '@/modules/auth/services/auth.service';
 import {
   IsUserEmailValid,
   IsUserPasswordValid,
@@ -12,10 +15,8 @@ import {
   UserEmailApiProperty,
   UserPasswordApiProperty,
 } from '@/modules/users/dtos/user.dto';
-import { SessionEntity } from '@/modules/users/entities/session.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
-import { AuthService } from '@/modules/users/services/auth.service';
-import { USERS_ERROR, USERS_TAG } from '@/modules/users/users.constant';
+import { USERS_ERROR } from '@/modules/users/users.constant';
 
 class LoginBodyDto {
   @UserEmailApiProperty()
@@ -42,7 +43,7 @@ class LoginResponseDto {
 }
 
 @Controller()
-@ApiTags(USERS_TAG)
+@ApiTags(AUTH_TAG)
 export class LoginEndpoint {
   constructor(
     private readonly em: EntityManager,

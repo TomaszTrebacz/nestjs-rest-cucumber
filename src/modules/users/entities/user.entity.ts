@@ -6,10 +6,10 @@ import {
   BlobType,
   ManyToOne,
 } from '@mikro-orm/core';
-import { SessionEntity } from './session.entity';
 import { IdCreatedColumns } from '@/common/database/columns.entity';
 import { Nullable, PartiallyRequired } from '@/common/types';
 import { setDefault } from '@/common/utils';
+import { SessionEntity } from '@/modules/auth/entities/session.entity';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 
 @Entity({ tableName: 'users' })

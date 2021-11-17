@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { forwardRef, Module } from '@nestjs/common';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { CreateOrganizationEndpoint } from '@/modules/organizations/endpoints/create-organization.endpoint';
 import { DeleteOrganizationEndpoint } from '@/modules/organizations/endpoints/delete-organization.endpoint';
 import { GetOrganizationsListEndpoint } from '@/modules/organizations/endpoints/get-organizations-list.endpoint';
@@ -12,6 +13,7 @@ import { UsersModule } from '@/modules/users/users.module';
 @Module({
   imports: [
     MikroOrmModule.forFeature([OrganizationEntity]),
+    forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
   ],
   providers: [OrganizationsService],

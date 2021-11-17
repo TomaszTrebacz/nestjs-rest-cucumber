@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from '@/modules/users/services/auth.service';
-import { USERS_ERROR } from '@/modules/users/users.constant';
+import { AUTH_ERROR } from '@/modules/auth/auth.constant';
+import { AuthService } from '@/modules/auth/services/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     const session = await this.authService.getSessionFromHeader(req);
 
     if (!session) {
-      throw USERS_ERROR.NO_VALID_TOKEN;
+      throw AUTH_ERROR.NO_VALID_TOKEN;
     }
     const isAdmin = this.reflector.get<boolean | undefined>(
       'isAdmin',
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
     );
 
     if (isAdmin !== undefined && session.user.isAdmin !== isAdmin) {
-      throw USERS_ERROR.PERMISSION_DENIED;
+      throw AUTH_ERROR.PERMISSION_DENIED;
     }
 
     req.session = session;

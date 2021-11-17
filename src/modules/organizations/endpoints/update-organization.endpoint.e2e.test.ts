@@ -1,10 +1,10 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import faker from 'faker';
 import { createApp } from '@/main';
+import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
+import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { ORGANIZATIONS_ERROR } from '@/modules/organizations/organizations.constant';
-import { setupCreateAuthUser } from '@/modules/users/__test__/users.utils';
-import { USERS_ERROR } from '@/modules/users/users.constant';
 import {
   clearDatabase,
   defineCall,
@@ -44,7 +44,7 @@ describe('organizations -> UpdateOrganizationEndpoint', () => {
   it('Should return UNAUTHENTICATED when no valid auth token was provided', async () => {
     const res = await callUpdateOrganization('', unknownId());
 
-    expectHttpError(res, USERS_ERROR.NO_VALID_TOKEN);
+    expectHttpError(res, AUTH_ERROR.NO_VALID_TOKEN);
   });
 
   it('Should return PERMISSION_DENIED when called by non admin user', async () => {
@@ -52,7 +52,7 @@ describe('organizations -> UpdateOrganizationEndpoint', () => {
 
     const res = await callUpdateOrganization(authUser.token, unknownId());
 
-    expectHttpError(res, USERS_ERROR.PERMISSION_DENIED);
+    expectHttpError(res, AUTH_ERROR.PERMISSION_DENIED);
   });
 
   it('Should return NOT_FOUND when organization with provided id was not found', async () => {

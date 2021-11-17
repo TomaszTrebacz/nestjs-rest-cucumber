@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { CONFIG } from '@/config';
 import { hashString } from '@/common/utils';
-import { SessionEntity } from '@/modules/users/entities/session.entity';
+import { SessionEntity } from '@/modules/auth/entities/session.entity';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
     return new Date(Date.now() + 1000 * 60 * 60 * 24); // expires after 24h
   }
 
-  getTokenFromHeader(req: Request): undefined | string {
+  private getTokenFromHeader(req: Request): undefined | string {
     const { authorization } = req.headers;
 
     if (!authorization || !authorization.match(/^Bearer [a-zA-Z0-9_-]{24}$/)) {
@@ -27,7 +27,9 @@ export class AuthService {
     return authorization.replace('Bearer ', '');
   }
 
-  async getSessionByToken(token?: string): Promise<undefined | SessionEntity> {
+  private async getSessionByToken(
+    token?: string,
+  ): Promise<undefined | SessionEntity> {
     if (!token) {
       return;
     }

@@ -12,7 +12,7 @@ import {
   expectHttpError,
 } from '@/test-utils/common.util';
 
-describe('users -> LoginEndpoint', () => {
+describe('auth -> LoginEndpoint', () => {
   let app: INestApplication;
 
   const randomUser = setupRandomUser(() => app);

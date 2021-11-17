@@ -1,9 +1,9 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { createApp } from '@/main';
+import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
+import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
-import { setupCreateAuthUser } from '@/modules/users/__test__/users.utils';
-import { USERS_ERROR } from '@/modules/users/users.constant';
 import {
   clearDatabase,
   defineCall,
@@ -43,7 +43,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   it('Should return UNAUTHENTICATED when no valid auth token was provided', async () => {
     const res = await callGetOrganizationsList();
 
-    expectHttpError(res, USERS_ERROR.NO_VALID_TOKEN);
+    expectHttpError(res, AUTH_ERROR.NO_VALID_TOKEN);
   });
 
   it('Should return PERMISSION_DENIED when called by non admin user', async () => {
@@ -51,7 +51,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
 
     const res = await callGetOrganizationsList(authUser.token);
 
-    expectHttpError(res, USERS_ERROR.PERMISSION_DENIED);
+    expectHttpError(res, AUTH_ERROR.PERMISSION_DENIED);
   });
 
   it('Should return organizations with proper pagination of first page', async () => {

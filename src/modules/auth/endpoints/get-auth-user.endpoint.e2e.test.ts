@@ -1,14 +1,14 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { createApp } from '@/main';
-import { setupCreateAuthUser } from '@/modules/users/__test__/users.utils';
-import { USERS_ERROR } from '@/modules/users/users.constant';
+import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
+import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import {
   clearDatabase,
   defineCall,
   expectHttpError,
 } from '@/test-utils/common.util';
 
-describe('users -> GetAuthUserEndpoint', () => {
+describe('auth -> GetAuthUserEndpoint', () => {
   let app: INestApplication;
 
   const createAuthUser = setupCreateAuthUser(() => app);
@@ -25,12 +25,12 @@ describe('users -> GetAuthUserEndpoint', () => {
     await clearDatabase(app);
   });
 
-  const callGetAuthUser = defineCall(() => app, 'get', `/users/me`);
+  const callGetAuthUser = defineCall(() => app, 'get', `/auth/me`);
 
   it('Should return UNAUTHENTICATED when no valid auth token was provided', async () => {
     const res = await callGetAuthUser('');
 
-    expectHttpError(res, USERS_ERROR.NO_VALID_TOKEN);
+    expectHttpError(res, AUTH_ERROR.NO_VALID_TOKEN);
   });
 
   it('Should return auth user', async () => {
