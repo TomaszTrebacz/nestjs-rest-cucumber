@@ -1,9 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
 import { IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 import { createListDto } from '@/common/helpers/list';
 import { IsTrimmed } from '@/common/validators';
+import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 import { ORGANIZATION_VALIDATION } from '@/modules/organizations/organizations.constant';
 
 export const OrganizationIdApiProperty = () =>
@@ -37,22 +37,25 @@ export class OrganizationIdPathParamDto {
 
 export class OrganizationResponseDto {
   @OrganizationIdApiProperty()
-  @Expose()
-  id!: string;
+  id: string;
 
   @ApiProperty({
     type: 'date-time',
     description: 'Timestamp of the organization creation.',
     example: '1970-01-01T00:00:00.000Z',
   })
-  @Expose()
-  createdAt!: Date;
+  createdAt: Date;
 
   @OrganizationNameApiProperty()
-  @Expose()
-  name!: string;
+  name: string;
+
+  constructor(data: OrganizationEntity) {
+    this.id = data.id;
+    this.createdAt = data.createdAt;
+    this.name = data.name;
+  }
 }
 
-export class PaginatedOrganizationResponseDto extends createListDto(
+export class PaginatedOrganizationResponseDto extends createListDto<OrganizationEntity>(
   OrganizationResponseDto,
 ) {}

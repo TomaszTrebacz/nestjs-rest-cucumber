@@ -35,7 +35,7 @@ export class UpdateOrganizationEndpoint {
   async handler(
     @Param() { organizationId }: OrganizationIdPathParamDto,
     @Body() body: UpdateOrganizationBodyDto,
-  ) {
+  ): Promise<OrganizationResponseDto> {
     const organization = await this.organizationService.findOneByIdOrThrow(
       organizationId,
     );
@@ -51,6 +51,6 @@ export class UpdateOrganizationEndpoint {
 
     await this.em.flush();
 
-    return organization;
+    return new OrganizationResponseDto(organization);
   }
 }

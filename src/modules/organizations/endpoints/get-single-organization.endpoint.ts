@@ -22,7 +22,13 @@ export class GetSingleOrganizationEndpoint {
   @ApiOperation({ description: 'Get single organization' })
   @Auth(UserType.ADMIN)
   @DefineResponse(HttpStatus.OK, OrganizationResponseDto)
-  async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
-    return await this.organizationService.findOneByIdOrThrow(organizationId);
+  async handler(
+    @Param() { organizationId }: OrganizationIdPathParamDto,
+  ): Promise<OrganizationResponseDto> {
+    const organization = await this.organizationService.findOneByIdOrThrow(
+      organizationId,
+    );
+
+    return new OrganizationResponseDto(organization);
   }
 }

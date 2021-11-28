@@ -30,13 +30,15 @@ export class CreateOrganizationEndpoint {
   @ApiOperation({ description: 'Create organization' })
   @Auth(UserType.ADMIN)
   @DefineResponse(HttpStatus.CREATED, OrganizationResponseDto)
-  async handler(@Body() body: CreateOrganizationBodyDto) {
+  async handler(
+    @Body() body: CreateOrganizationBodyDto,
+  ): Promise<OrganizationResponseDto> {
     await this.organizationService.assertNameUniqueness(body.name);
 
     const organization = new OrganizationEntity(body);
 
     await this.em.persistAndFlush(organization);
 
-    return organization;
+    return new OrganizationResponseDto(organization);
   }
 }

@@ -4,7 +4,7 @@ import { Auth } from '@/common/decorators/auth';
 import { AuthUser } from '@/common/decorators/auth-user';
 import { DefineResponse } from '@/common/decorators/define-response';
 import { AUTH_TAG } from '@/modules/auth/auth.constant';
-import { UserDto } from '@/modules/users/dtos/user.dto';
+import { UserResponseDto } from '@/modules/users/dtos/user.dto';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 
 @Controller()
@@ -13,8 +13,8 @@ export class GetAuthUserEndpoint {
   @Get('/auth/me')
   @ApiOperation({ description: 'Get auth user' })
   @Auth()
-  @DefineResponse(HttpStatus.OK, UserDto)
+  @DefineResponse(HttpStatus.OK, UserResponseDto)
   async handler(@AuthUser() authUser: UserEntity) {
-    return authUser;
+    return new UserResponseDto(authUser);
   }
 }
