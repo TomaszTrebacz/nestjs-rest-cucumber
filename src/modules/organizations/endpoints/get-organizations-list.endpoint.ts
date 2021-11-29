@@ -47,6 +47,11 @@ export class GetOrganizationsListEndpoint {
       query.andWhere({ name: { $ilike: `%${queryParam.name}%` } });
     }
 
-    return await returnPaginatedResult(query, queryParam);
+    const paginatedOrganizations = await returnPaginatedResult(
+      query,
+      queryParam,
+    );
+
+    return new PaginatedOrganizationResponseDto(paginatedOrganizations);
   }
 }

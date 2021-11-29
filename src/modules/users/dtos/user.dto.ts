@@ -1,8 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { IsTrimmed } from '@/common/validators';
+import { UserEntity } from '@/modules/users/entities/user.entity';
 import { USER_VALIDATION } from '@/modules/users/users.constant';
 
 export const UserEmailApiProperty = () =>
@@ -50,36 +50,39 @@ export const UserFullNameApiProperty = () =>
     description: 'Full name of the user.',
   });
 
-export class UserDto {
+export class UserResponseDto {
   @ApiProperty({
     type: 'string',
     format: 'uuid',
     description: 'ID of the user.',
   })
-  @Expose()
-  id!: string;
+  id: string;
 
   @ApiProperty({
     type: 'date-time',
     description: 'Timestamp of the user creation.',
     example: '1970-01-01T00:00:00.000Z',
   })
-  @Expose()
-  createdAt!: Date;
+  createdAt: Date;
 
   @UserEmailApiProperty()
-  @Expose()
-  email!: string;
+  email: string;
 
   @UserFullNameApiProperty()
-  @Expose()
-  fullName!: string;
+  fullName: string;
 
   @ApiProperty({ description: 'Indicates whether user is an admin.' })
-  @Expose()
-  isAdmin!: boolean;
+  isAdmin: boolean;
 
   @ApiProperty({ description: 'Indicates whether user is already onboarded.' })
-  @Expose()
-  isOnboarded!: boolean;
+  isOnboarded: boolean;
+
+  constructor(data: UserEntity) {
+    this.id = data.id;
+    this.createdAt = data.createdAt;
+    this.email = data.email;
+    this.fullName = data.fullName;
+    this.isAdmin = data.isAdmin;
+    this.isOnboarded = data.isOnboarded;
+  }
 }

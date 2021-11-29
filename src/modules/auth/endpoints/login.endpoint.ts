@@ -11,7 +11,7 @@ import { AuthService } from '@/modules/auth/services/auth.service';
 import {
   IsUserEmailValid,
   IsUserPasswordValid,
-  UserDto,
+  UserResponseDto,
   UserEmailApiProperty,
   UserPasswordApiProperty,
 } from '@/modules/users/dtos/user.dto';
@@ -34,12 +34,17 @@ class LoginResponseDto {
       'Token that should be passed with following requests to authenticate user.',
   })
   @Expose()
-  token!: string;
+  token: string;
 
   @ApiProperty({ description: 'Logged user.' })
-  @Type(() => UserDto)
+  @Type(() => UserResponseDto)
   @Expose()
-  user!: UserDto;
+  user: UserResponseDto;
+
+  constructor(token: string, user: UserEntity) {
+    this.token = token;
+    this.user = new UserResponseDto(user);
+  }
 }
 
 @Controller()
@@ -80,6 +85,6 @@ export class LoginEndpoint {
 
     await this.em.persistAndFlush(session);
 
-    return { token, user };
+    return new LoginResponseDto(token, user);
   }
 }

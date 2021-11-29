@@ -1,7 +1,7 @@
 import { QueryBuilder } from '@mikro-orm/postgresql';
 import { Type as ClassType } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsInt, Min, Max, IsEnum, IsIn } from 'class-validator';
 
 export enum SortDirection {
@@ -14,6 +14,11 @@ export type ListQueryParam = {
   perPage: number;
   sortDir: SortDirection;
   sortByValue: string;
+};
+
+type PaginatedEntity<T> = {
+  totalCount: number;
+  nodes: T[];
 };
 
 export const createListQueryParamDto = (
@@ -71,7 +76,9 @@ export const createListQueryParamDto = (
   return ListQueryParamDto;
 };
 
-export const createListDto = <NodeType>(classRef: ClassType<NodeType>) => {
+export const createListDto = <Entity, NodeType = void>(
+  classRef: ClassType<NodeType>,
+) => {
   class ListDto {
     @ApiProperty({
       type: 'integer',
@@ -79,25 +86,28 @@ export const createListDto = <NodeType>(classRef: ClassType<NodeType>) => {
         'The total number of results, regardless of page and perPage arguments.',
       minimum: 0,
     })
-    @Expose()
-    totalCount!: number;
+    totalCount: number;
 
     @ApiProperty({
       type: [classRef],
       description: 'List of nodes that matched the query.',
     })
-    @Expose()
     @Type(() => classRef)
-    nodes!: NodeType[];
+    nodes: NodeType[];
+
+    constructor(data: PaginatedEntity<Entity>) {
+      this.totalCount = data.totalCount;
+      this.nodes = data.nodes.map((node) => new classRef(node));
+    }
   }
 
   return ListDto;
 };
 
-export const returnPaginatedResult = async (
-  query: QueryBuilder,
+export const returnPaginatedResult = async <T>(
+  query: QueryBuilder<T>,
   queryParam: ListQueryParam,
-) => {
+): Promise<PaginatedEntity<T>> => {
   const clonedQuery = query.clone();
 
   query

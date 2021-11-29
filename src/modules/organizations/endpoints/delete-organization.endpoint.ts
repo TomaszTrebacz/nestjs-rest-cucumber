@@ -19,7 +19,9 @@ export class DeleteOrganizationEndpoint {
   @ApiOperation({ description: 'Delete organization' })
   @Auth(UserType.ADMIN)
   @DefineResponse(HttpStatus.NO_CONTENT)
-  async handler(@Param() { organizationId }: OrganizationIdPathParamDto) {
+  async handler(
+    @Param() { organizationId }: OrganizationIdPathParamDto,
+  ): Promise<void> {
     const organization = await this.organizationService.findOneByIdOrThrow(
       organizationId,
     );

@@ -17,7 +17,6 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/return-await': ['error', 'always'],
     '@typescript-eslint/no-inferrable-types': ['error', { ignoreProperties: true }],
