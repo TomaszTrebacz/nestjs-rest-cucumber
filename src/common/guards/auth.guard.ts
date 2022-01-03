@@ -19,12 +19,15 @@ export class AuthGuard implements CanActivate {
     if (!session) {
       throw AUTH_ERROR.NO_VALID_TOKEN;
     }
-    const userType = this.reflector.get<UserType | undefined>(
-      'userType',
+    const requiredUserTypes = this.reflector.get<UserType[] | undefined>(
+      'requiredUserTypes',
       context.getHandler(),
     );
 
-    if (userType !== undefined && session.user.type !== userType) {
+    if (
+      requiredUserTypes !== undefined &&
+      !requiredUserTypes.includes(session.user.type)
+    ) {
       throw AUTH_ERROR.PERMISSION_DENIED;
     }
 
