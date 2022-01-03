@@ -8,7 +8,7 @@ import { AuthGuard } from '@/common/guards/auth.guard';
 import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { UserType } from '@/modules/users/users.constant';
 
-export const Auth = (userType?: UserType) => {
+export const Auth = (...requiredUserTypes: UserType[]) => {
   const decorators = [
     UseGuards(AuthGuard),
     ApiBearerAuth(),
@@ -17,11 +17,13 @@ export const Auth = (userType?: UserType) => {
     }),
   ];
 
-  if (userType !== undefined) {
-    decorators.unshift(SetMetadata('userType', userType));
+  if (requiredUserTypes.length > 0) {
+    const joinedRequiredTypes = requiredUserTypes.join(', ');
+
+    decorators.unshift(SetMetadata('requiredUserTypes', requiredUserTypes));
     decorators.push(
       ApiForbiddenResponse({
-        description: `Auth user's type has to be "${userType}" to proceed this action.`,
+        description: `Auth user's type has to be one of "${joinedRequiredTypes}" to proceed this action.`,
       }),
     );
   }
