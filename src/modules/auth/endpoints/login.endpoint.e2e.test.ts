@@ -70,8 +70,7 @@ describe('auth -> LoginEndpoint', () => {
         createdAt: user.createdAt.toISOString(),
         email: user.email,
         fullName: user.fullName,
-        isAdmin: user.isAdmin,
-        isOnboarded: user.isOnboarded,
+        type: user.type,
       },
     });
   });

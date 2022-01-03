@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, Param, HttpStatus, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Auth, UserType } from '@/common/decorators/auth';
+import { Auth } from '@/common/decorators/auth';
 import { DefineResponse } from '@/common/decorators/define-response';
 import {
   OrganizationResponseDto,
@@ -9,6 +9,7 @@ import {
 } from '@/modules/organizations/dtos/organization.dto';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
 import { OrganizationsService } from '@/modules/organizations/services/organizations.service';
+import { UserType } from '@/modules/users/users.constant';
 
 @Controller()
 @ApiTags(ORGANIZATIONS_TAG)

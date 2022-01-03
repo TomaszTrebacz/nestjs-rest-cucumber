@@ -6,13 +6,9 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { AUTH_ERROR } from '@/modules/auth/auth.constant';
+import { UserType } from '@/modules/users/users.constant';
 
-export const UserType = {
-  ADMIN: true,
-  STANDARD: false,
-};
-
-export const Auth = (isAdmin?: boolean) => {
+export const Auth = (userType?: UserType) => {
   const decorators = [
     UseGuards(AuthGuard),
     ApiBearerAuth(),
@@ -21,11 +17,11 @@ export const Auth = (isAdmin?: boolean) => {
     }),
   ];
 
-  if (isAdmin !== undefined) {
-    decorators.unshift(SetMetadata('isAdmin', isAdmin));
+  if (userType !== undefined) {
+    decorators.unshift(SetMetadata('userType', userType));
     decorators.push(
       ApiForbiddenResponse({
-        description: `Auth user isAdmin parameter is not equal to "${isAdmin}".`,
+        description: `Auth user's type has to be "${userType}" to proceed this action.`,
       }),
     );
   }

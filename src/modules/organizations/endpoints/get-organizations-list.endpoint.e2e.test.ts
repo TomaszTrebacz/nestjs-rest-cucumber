@@ -4,6 +4,7 @@ import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
 import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
+import { UserType } from '@/modules/users/users.constant';
 import {
   clearDatabase,
   defineCall,
@@ -55,7 +56,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper pagination of first page', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     await randomOrganization.some(3);
 
@@ -69,7 +70,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper pagination of second page', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     await randomOrganization.some(3);
 
@@ -83,7 +84,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper sort by createdAt ASC', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organizations = await randomOrganization.many([
       { createdAt: new Date(Date.now() + 2000) },
@@ -105,7 +106,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper sort by createdAt DESC', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organizations = await randomOrganization.many([
       { createdAt: new Date(Date.now() + 2000) },
@@ -127,7 +128,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper sort by name ASC', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organizations = await randomOrganization.many([
       { name: 'bbb' },
@@ -149,7 +150,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper sort by name DESC', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organizations = await randomOrganization.many([
       { name: 'bbb' },
@@ -171,7 +172,7 @@ describe('organizations -> GetOrganizationsListEndpoint', () => {
   });
 
   it('Should return organizations with proper filter by name', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organizations = await randomOrganization.many([
       { name: 'bbb' },

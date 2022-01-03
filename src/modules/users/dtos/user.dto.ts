@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { IsTrimmed } from '@/common/validators';
 import { UserEntity } from '@/modules/users/entities/user.entity';
-import { USER_VALIDATION } from '@/modules/users/users.constant';
+import { USER_VALIDATION, UserType } from '@/modules/users/users.constant';
 
 export const UserEmailApiProperty = () =>
   ApiProperty({
@@ -50,6 +50,13 @@ export const UserFullNameApiProperty = () =>
     description: 'Full name of the user.',
   });
 
+export const UserTypeApiProperty = () =>
+  ApiProperty({
+    type: 'string',
+    enum: UserType,
+    description: 'Type of the user.',
+  });
+
 export class UserResponseDto {
   @ApiProperty({
     type: 'string',
@@ -71,18 +78,14 @@ export class UserResponseDto {
   @UserFullNameApiProperty()
   fullName: string;
 
-  @ApiProperty({ description: 'Indicates whether user is an admin.' })
-  isAdmin: boolean;
-
-  @ApiProperty({ description: 'Indicates whether user is already onboarded.' })
-  isOnboarded: boolean;
+  @UserTypeApiProperty()
+  type: UserType;
 
   constructor(data: UserEntity) {
     this.id = data.id;
     this.createdAt = data.createdAt;
     this.email = data.email;
     this.fullName = data.fullName;
-    this.isAdmin = data.isAdmin;
-    this.isOnboarded = data.isOnboarded;
+    this.type = data.type;
   }
 }

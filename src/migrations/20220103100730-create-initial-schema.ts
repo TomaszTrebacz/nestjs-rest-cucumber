@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20211104154327 extends Migration {
+export class Migration20220103100730 extends Migration {
   async up(): Promise<void> {
     this.addSql('create extension if not exists citext;');
 
@@ -15,7 +15,7 @@ export class Migration20211104154327 extends Migration {
     );
 
     this.addSql(
-      'create table "users" ("id" uuid not null default gen_random_uuid(), "created_at" timestamptz(3) not null default now(), "email" citext not null, "password" text null, "full_name" text not null default \'\', "is_admin" bool not null default false, "is_onboarded" bool not null default false, "reset_password_token" bytea null, "reset_password_expires_at" timestamptz(3) null, "organization_id" uuid null);',
+      'create table "users" ("id" uuid not null default gen_random_uuid(), "created_at" timestamptz(3) not null default now(), "email" citext not null, "password" text null, "full_name" text not null default \'\', "type" text check ("type" in (\'ADMIN\', \'STANDARD\')) not null default \'STANDARD\', "reset_password_token" bytea null, "reset_password_expires_at" timestamptz(3) null, "organization_id" uuid null);',
     );
     this.addSql(
       'alter table "users" add constraint "users_pkey" primary key ("id");',

@@ -5,6 +5,7 @@ import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
 import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { ORGANIZATIONS_ERROR } from '@/modules/organizations/organizations.constant';
+import { UserType } from '@/modules/users/users.constant';
 import {
   clearDatabase,
   defineCall,
@@ -56,7 +57,7 @@ describe('organizations -> CreateOrganizationEndpoint', () => {
   });
 
   it('Should return ORGANIZATION_ERROR.NAME_EXISTS when organization with provided name already exists', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
     const existingOrganizations = await randomOrganization.one();
 
     const input = randomInput({ name: existingOrganizations.name });
@@ -67,7 +68,7 @@ describe('organizations -> CreateOrganizationEndpoint', () => {
   });
 
   it('Should return CreateOrganizationPayload', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const input = randomInput();
 

@@ -22,7 +22,7 @@
   "mikro-orm": {
     "useTsNode": true,
     "configPaths": [
-      "./src/mikro-orm.config.ts"
+      "./src/mikro-orm-cli.config.ts"
     ]
   },
   "dependencies": {
@@ -37,14 +37,13 @@
     "argon2": "^0.27.2",
     "aws-sdk": "^2.969.0",
     "axios": "^0.24.0",
-    "class-transformer": "^0.4.0",
+    "class-transformer": "^0.5.0",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
     "handlebars": "^4.7.7",
     "html-to-text": "^8.0.0",
     "nodemailer": "^6.6.3",
     "pino": "^7.1.0",
-    "readline-sync": "^1.4.10",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.4.0",
     "source-map-support": "^0.5.19",
@@ -52,8 +51,8 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^14.1.0",
-    "@commitlint/config-conventional": "^14.1.0",
+    "@commitlint/cli": "^16.0.0",
+    "@commitlint/config-conventional": "^16.0.0",
     "@jest/types": "^27.0.6",
     "@mikro-orm/cli": "^4.5.7",
     "@nestjs/cli": "^8.0.0",
@@ -74,20 +73,21 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-unicorn": "^38.0.0",
+    "eslint-plugin-unicorn": "^40.0.0",
     "faker": "^5.5.3",
     "husky": "^7.0.0",
     "jest": "^27.0.0",
     "jest-environment-node": "^27.0.0",
-    "lint-staged": "^11.1.0",
-    "mjml": "^4.10.2",
+    "lint-staged": "^12.1.0",
+    "mjml": "^4.10.0",
     "prettier": "^2.3.0",
+    "readline-sync": "^1.4.10",
     "rimraf": "^3.0.0",
     "supertest": "^6.1.0",
     "ts-jest": "^27.0.0",
     "ts-loader": "^9.2.0",
     "ts-node": "^10.1.0",
     "tsconfig-paths": "^3.10.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.5.0"
   }
 }
