@@ -52,7 +52,7 @@ export class EmailService {
   }
 
   sendResetPasswordEmail(to: string, resetPasswordToken: string): void {
-    const subject = 'Zresetuj swoje hasło';
+    const subject = 'Password reset';
     const url = `${CONFIG.APP.FRONTEND_URL}/reset-password/${resetPasswordToken}`;
 
     const html = resetPasswordTemplate({
