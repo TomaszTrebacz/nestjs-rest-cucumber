@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Controller, HttpStatus, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Auth, UserType } from '@/common/decorators/auth';
+import { Auth } from '@/common/decorators/auth';
 import { DefineResponse } from '@/common/decorators/define-response';
 import {
   createListQueryParamDto,
@@ -15,6 +15,7 @@ import {
 } from '@/modules/organizations/dtos/organization.dto';
 import { OrganizationEntity } from '@/modules/organizations/entities/organization.entity';
 import { ORGANIZATIONS_TAG } from '@/modules/organizations/organizations.constant';
+import { UserType } from '@/modules/users/users.constant';
 
 const organizationSortMap: Record<string, string> = {
   createdAt: 'created_at',

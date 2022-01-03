@@ -1,8 +1,9 @@
 import { MikroORM } from '@mikro-orm/core';
 import argon2 from 'argon2';
 import yargs from 'yargs';
-import ormConfig from '../mikro-orm.config';
 import { UserEntity } from '@/modules/users/entities/user.entity';
+import { UserType } from '@/modules/users/users.constant';
+import ormConfig from '../mikro-orm.config';
 
 const args = yargs
   .wrap(120)
@@ -45,7 +46,7 @@ const args = yargs
     const adminUser = new UserEntity({
       email,
       password: await argon2.hash(password),
-      isAdmin: true,
+      type: UserType.ADMIN,
     });
 
     await em.persistAndFlush(adminUser);

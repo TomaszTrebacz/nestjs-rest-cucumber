@@ -44,8 +44,7 @@ describe('auth -> GetAuthUserEndpoint', () => {
       createdAt: expect.any(String),
       email: authUser.entity.email,
       fullName: authUser.entity.fullName,
-      isAdmin: authUser.entity.isAdmin,
-      isOnboarded: authUser.entity.isOnboarded,
+      type: authUser.entity.type,
     });
   });
 });

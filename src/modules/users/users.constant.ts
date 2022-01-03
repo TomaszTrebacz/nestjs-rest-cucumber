@@ -1,5 +1,10 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
+export enum UserType {
+  ADMIN = 'ADMIN',
+  STANDARD = 'STANDARD',
+}
+
 export const USERS_TAG = 'Users';
 
 export const USERS_ERROR = {

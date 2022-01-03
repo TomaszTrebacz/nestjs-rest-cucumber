@@ -4,6 +4,7 @@ import { setupCreateAuthUser } from '@/modules/auth/__test__/auth.utils';
 import { AUTH_ERROR } from '@/modules/auth/auth.constant';
 import { setupRandomOrganization } from '@/modules/organizations/__test__/organizations.utils';
 import { ORGANIZATIONS_ERROR } from '@/modules/organizations/organizations.constant';
+import { UserType } from '@/modules/users/users.constant';
 import {
   clearDatabase,
   defineCall,
@@ -50,7 +51,7 @@ describe('organizations -> DeleteOrganizationEndpoint', () => {
   });
 
   it('Should return NOT_FOUND when organization with provided id was not found', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const res = await callDeleteOrganization(authUser.token, unknownId());
 
@@ -58,7 +59,7 @@ describe('organizations -> DeleteOrganizationEndpoint', () => {
   });
 
   it('Should delete organization successfully', async () => {
-    const authUser = await createAuthUser({ isAdmin: true });
+    const authUser = await createAuthUser({ type: UserType.ADMIN });
 
     const organization = await randomOrganization.one();
 
