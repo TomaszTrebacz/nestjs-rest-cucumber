@@ -1,10 +1,12 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import faker from 'faker';
+import { defineFeature, DefineStepFunction, loadFeature } from 'jest-cucumber';
 import { createApp } from '@/main';
 import {
   setupRandomUser,
   USER_PASSWORD,
 } from '@/modules/users/__test__/users.utils';
+import { UserEntity } from '@/modules/users/entities/user.entity';
 import { USERS_ERROR } from '@/modules/users/users.constant';
 import {
   clearDatabase,
@@ -12,8 +14,13 @@ import {
   expectHttpError,
 } from '@/test-utils/common.util';
 
-describe('auth -> LoginEndpoint', () => {
+const feature = loadFeature('./login.endpoint.e2e.test.feature', {
+  loadRelativePath: true,
+});
+
+defineFeature(feature, (test) => {
   let app: INestApplication;
+  let user: UserEntity;
 
   const randomUser = setupRandomUser(() => app);
 
@@ -37,41 +44,70 @@ describe('auth -> LoginEndpoint', () => {
     ...data,
   });
 
-  it('Should return EMAIL_NOT_FOUND when user with provided email was not found', async () => {
-    const input = randomInput();
+  const givenRandomUserIsCreatedInDatabase = (given: DefineStepFunction) => {
+    given('random user is created in database', async () => {
+      user = await randomUser.one();
+    });
+  };
 
-    const res = await callLogin().send(input);
+  test('Email is not found', ({ given, then }) => {
+    let input: Record<string, unknown>;
 
-    expectHttpError(res, USERS_ERROR.EMAIL_NOT_FOUND);
+    given('email which does not exist in database', () => {
+      input = randomInput();
+    });
+
+    then('API throws error that email was not found', async () => {
+      const res = await callLogin().send(input);
+
+      expectHttpError(res, USERS_ERROR.EMAIL_NOT_FOUND);
+    });
   });
 
-  it('Should return INVALID_PASSWORD when provided password does not match email', async () => {
-    const user = await randomUser.one();
+  test('Password is invalid', ({ given, when, then }) => {
+    let input: Record<string, unknown>;
 
-    const input = randomInput({ email: user.email });
+    givenRandomUserIsCreatedInDatabase(given);
 
-    const res = await callLogin().send(input);
+    when('password is different from the one in database', () => {
+      input = randomInput({ email: user.email });
+    });
 
-    expectHttpError(res, USERS_ERROR.INVALID_PASSWORD);
+    then('API throws error that password is invalid', async () => {
+      const res = await callLogin().send(input);
+
+      expectHttpError(res, USERS_ERROR.INVALID_PASSWORD);
+    });
   });
 
-  it('Should return LoginPayload', async () => {
-    const user = await randomUser.one();
+  test('Login is successful', ({ given, when, then, and }) => {
+    let input: Record<string, unknown>;
+    let status: number;
+    let body: Record<string, unknown>;
 
-    const input = randomInput({ email: user.email, password: USER_PASSWORD });
+    givenRandomUserIsCreatedInDatabase(given);
 
-    const { status, body } = await callLogin().send(input);
+    when('credentials are valid', () => {
+      input = randomInput({ email: user.email, password: USER_PASSWORD });
+    });
 
-    expect(status).toBe(HttpStatus.CREATED);
-    expect(body).toStrictEqual({
-      token: expect.any(String),
-      user: {
-        id: user.id,
-        createdAt: user.createdAt.toISOString(),
-        email: user.email,
-        fullName: user.fullName,
-        type: user.type,
-      },
+    then('API should return status 201', async () => {
+      ({ status, body } = await callLogin().send(input));
+
+      expect(status).toBe(HttpStatus.CREATED);
+    });
+
+    and('API should return user with token', () => {
+      expect(body).toStrictEqual({
+        token: expect.any(String),
+        user: {
+          id: user.id,
+          createdAt: user.createdAt.toISOString(),
+          email: user.email,
+          fullName: user.fullName,
+          type: user.type,
+        },
+      });
     });
   });
 });
